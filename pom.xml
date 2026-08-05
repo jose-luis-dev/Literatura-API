@@ -11,8 +11,8 @@
 	<groupId>com.LiteraturaAPI</groupId>
 	<artifactId>LiterAluraChallenge</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>backend-literatura</name>
+	<description>Proyecto Challenge de consumo API consulta de libros</description>
 	<url/>
 	<licenses>
 		<license/>
