@@ -15,7 +15,9 @@ public class GutendexClient {
     @Value("${gutendex.api.baseurl}")
     private String baseUrl;
 
-    private final HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client = HttpClient.newBuilder()
+            .followRedirects(HttpClient.Redirect.NORMAL)
+            .build();
 
     public String fetch(String endpoint){
         String url = baseUrl + endpoint;
@@ -37,9 +39,11 @@ public class GutendexClient {
             throw new RuntimeException(e);
         }
 
-        if (response.statusCode() != 200){
+        int status = response.statusCode();
+
+        if (status < 200 || status >= 300){
             throw new RuntimeException(
-                    "Error al consumir API. Código: " + response.statusCode());
+                    "Error al consumir API. Código: " + status);
         }
         return response.body();
     }
