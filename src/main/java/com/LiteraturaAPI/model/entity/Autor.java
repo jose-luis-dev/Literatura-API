@@ -26,7 +26,7 @@ public class Autor {
     @Column(name = "fecha_fallecimiento")
     private Integer fechaFallecimiento;
 
-    @ManyToMany(mappedBy = "autores")
+    @OneToMany(mappedBy = "autor")
     private List<Libro> libros;
 
 }

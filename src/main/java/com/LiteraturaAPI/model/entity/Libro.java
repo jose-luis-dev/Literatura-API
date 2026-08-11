@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,11 +26,7 @@ public class Libro {
     @Column(name = "numero_descargas")
     private Integer numeroDescargas;
 
-    @ManyToMany
-    @JoinTable(
-            name = "libros_autores",
-            joinColumns = @JoinColumn(name = "libro_id"),
-            inverseJoinColumns = @JoinColumn(name = "autor_id")
-    )
-    private List<Autor> autores;
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
+    private Autor autor;
 }

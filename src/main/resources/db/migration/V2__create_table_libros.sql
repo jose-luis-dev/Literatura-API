@@ -3,5 +3,6 @@ CREATE TABLE libros (
     gutendex_id INT NOT NULL,
     titulo VARCHAR(255) NOT NULL,
     idioma VARCHAR(10),
-    numero_descargas INT
+    numero_descargas INT,
+    autor_id BIGINT REFERENCES autores(id)
 );
