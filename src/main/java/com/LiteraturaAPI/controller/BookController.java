@@ -1,5 +1,6 @@
 package com.LiteraturaAPI.controller;
 
+import com.LiteraturaAPI.dto.BookDTO;
 import com.LiteraturaAPI.exception.LibroNoEncontradoException;
 import com.LiteraturaAPI.exception.LibroYaExisteException;
 import com.LiteraturaAPI.model.BookData;
@@ -59,7 +60,16 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al guardar el libro: " + e.getMessage());
         }
-
         }
+
+        // Listar Libros
+        @GetMapping
+        public List<BookDTO> listarLibros(){
+        return bookService.listarLibros();
+        }
+
     }
+
+
+
 
