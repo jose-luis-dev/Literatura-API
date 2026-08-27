@@ -65,7 +65,19 @@ public class BookController {
         // Listar Libros
         @GetMapping
         public List<BookDTO> listarLibros(){
-        return bookService.listarLibros();
+            return bookService.listarLibros();
+        }
+
+        // Libros por idioma
+        @GetMapping("/idioma")
+        public List<BookDTO> buscarPorIdioma(@RequestParam String idioma){
+            return bookService.buscarPorIdioma(idioma);
+        }
+
+        // Cantidad de libros por idioma
+        @GetMapping("/count")
+        public long contarPorIdioma(@RequestParam String idioma){
+            return bookService.contarPorIdioma(idioma);
         }
 
     }

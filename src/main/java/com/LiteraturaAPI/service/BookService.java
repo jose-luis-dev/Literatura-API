@@ -47,4 +47,18 @@ public class BookService {
                 .toList();
     }
 
+
+    // buscar libros por idioma
+    public List<BookDTO> buscarPorIdioma(String idioma){
+        return bookRepository.findByIdiomaIgnoreCase(idioma)
+                .stream()
+                .map(bookMapper::toDTO)
+                .toList();
+    }
+
+    // Cantidad de libros por idioma
+    public long contarPorIdioma(String idioma ){
+        return bookRepository.countByIdiomaIgnoreCase(idioma);
+    }
+
 }
