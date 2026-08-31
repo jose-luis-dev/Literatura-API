@@ -34,7 +34,7 @@ public class BibliotecaService {
 
     @Transactional
     public void guardarLibroPorTitulo(String titulo) {
-        var response = bookService.buscarPorTitulo(titulo);
+        var response = bookService.buscarEnGutendexPorTitulo(titulo);
 
         if (response.resultados() == null || response.resultados().isEmpty()) {
             throw new LibroNoEncontradoException("No se encontraron libros con este titulo.");

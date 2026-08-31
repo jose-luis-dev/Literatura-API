@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookService {
@@ -17,7 +18,6 @@ public class BookService {
 
     @Autowired
     private ConvertData convertData;
-
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
@@ -31,8 +31,8 @@ public class BookService {
     }
 
 
-    // Busqueda de libro por titulo
-    public BookResponse buscarPorTitulo (String titulo){
+    // libro por título desde API Externa
+    public BookResponse buscarEnGutendexPorTitulo (String titulo){
         String url = "/books/?search=" + titulo.replace(" ","+");
         String json = gutendexClient.fetch(url);
 
@@ -47,6 +47,11 @@ public class BookService {
                 .toList();
     }
 
+    // Buscar título de libros desde la DB
+    public Optional<BookDTO> buscarEnBDPorTitulo(String titulo){
+        return bookRepository.findByTituloIgnoreCase(titulo)
+                .map(bookMapper::toDTO);
+    }
 
     // buscar libros por idioma
     public List<BookDTO> buscarPorIdioma(String idioma){

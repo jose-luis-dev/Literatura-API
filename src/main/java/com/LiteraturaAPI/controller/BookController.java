@@ -2,7 +2,6 @@ package com.LiteraturaAPI.controller;
 
 import com.LiteraturaAPI.dto.BookDTO;
 import com.LiteraturaAPI.exception.LibroNoEncontradoException;
-import com.LiteraturaAPI.exception.LibroYaExisteException;
 import com.LiteraturaAPI.model.BookData;
 import com.LiteraturaAPI.model.BookResponse;
 import com.LiteraturaAPI.service.BibliotecaService;
@@ -27,45 +26,44 @@ public class BookController {
         this.bibliotecaService = bibliotecaService;
     }
 
-    // Buscar titulo del libro
+    // Buscar título del libro desde API Externa
     @GetMapping("/search")
     public ResponseEntity<List<BookData>> buscar (@RequestParam String titulo){
-        BookResponse respuesta = bookService.buscarPorTitulo(titulo);
+        BookResponse respuesta = bookService.buscarEnGutendexPorTitulo(titulo);
 
         if (respuesta == null || respuesta.resultados() == null || respuesta.resultados().isEmpty()) {
-            System.out.println("No se encontraron libros con este titulo.");
-            return ResponseEntity.notFound().build(); // Devolvemos 404 Not Found si no hay coincidencia
+
+            throw new LibroNoEncontradoException(
+                    "No se encontraron libros con el título: " + titulo
+            );
         }
         return ResponseEntity.ok(respuesta.resultados());
-
     }
 
     // Buscar y guardar el primer libro encontrado.
     @PostMapping
     public ResponseEntity<String> guardarLibroPorTitulo(@RequestParam String titulo) {
-        try {
-            bibliotecaService.guardarLibroPorTitulo(titulo);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Libro con titulo '" + titulo + "' guardado correctamente en la DB.");
-        }catch (LibroNoEncontradoException e) {
-            // 404 Not found -- cuando no existe en la API EXTERNA
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        } catch (LibroYaExisteException e) {
-            // 409 Conflict cuando ya está registrado en la DB
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(e.getMessage());
-        } catch (Exception e) {
-            // 500 para cualquier error inesperado
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al guardar el libro: " + e.getMessage());
-        }
+        bibliotecaService.guardarLibroPorTitulo(titulo);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Libro con titulo '" + titulo + "' guardado correctamente en la DB.");
         }
 
         // Listar Libros
         @GetMapping
         public List<BookDTO> listarLibros(){
             return bookService.listarLibros();
+        }
+
+        // Buscar desde DB título de libro
+        @GetMapping("/titulo")
+        public ResponseEntity<BookDTO> buscarEnDBPorTitulo(@RequestParam String titulo){
+
+            return bookService.buscarEnBDPorTitulo(titulo)
+                    .map(ResponseEntity::ok)
+                    .orElseThrow(() -> new LibroNoEncontradoException(
+                            "No existe un libro con el título: " + titulo
+                    ));
         }
 
         // Libros por idioma
