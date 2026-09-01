@@ -49,6 +49,4 @@ public class AuthorService {
                 .map(authorMapper::toDTO)
                 .toList();
     }
-
-
 }

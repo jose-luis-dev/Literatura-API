@@ -1,12 +1,12 @@
 package com.LiteraturaAPI.mapper;
 
 import com.LiteraturaAPI.dto.AuthorDTO;
-import com.LiteraturaAPI.model.entity.Autor;
+import com.LiteraturaAPI.model.entity.Author;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AuthorMapper {
-    public AuthorDTO toDTO(Autor autor){
+    public AuthorDTO toDTO(Author autor){
         return new AuthorDTO(
                 autor.getNombre(),
                 autor.getFechaNacimiento(),

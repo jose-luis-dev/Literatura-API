@@ -13,7 +13,7 @@ import lombok.Setter;
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "libros")
-public class Libro {
+public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +28,5 @@ public class Libro {
 
     @ManyToOne
     @JoinColumn(name = "autor_id")
-    private Autor autor;
+    private Author autor;
 }

@@ -1,16 +1,16 @@
 package com.LiteraturaAPI.repository;
 
-import com.LiteraturaAPI.model.entity.Libro;
+import com.LiteraturaAPI.model.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface BookRepository extends JpaRepository<Libro, Long> {
+public interface BookRepository extends JpaRepository<Book, Long> {
 
 
-    Optional<Libro> findByIdLibro(Integer idLibro);
-    Optional<Libro> findByTituloIgnoreCase(String titulo);
-    List<Libro> findByIdiomaIgnoreCase(String idioma);
+    Optional<Book> findByIdLibro(Integer idLibro);
+    Optional<Book> findByTituloIgnoreCase(String titulo);
+    List<Book> findByIdiomaIgnoreCase(String idioma);
     long countByIdiomaIgnoreCase(String idioma);
 }

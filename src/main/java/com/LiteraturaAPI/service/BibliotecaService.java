@@ -1,12 +1,13 @@
 package com.LiteraturaAPI.service;
 
 
+import com.LiteraturaAPI.exception.AutorNoEncontradoException;
 import com.LiteraturaAPI.exception.LibroNoEncontradoException;
 import com.LiteraturaAPI.exception.LibroYaExisteException;
 import com.LiteraturaAPI.model.AuthorData;
 import com.LiteraturaAPI.model.BookData;
-import com.LiteraturaAPI.model.entity.Autor;
-import com.LiteraturaAPI.model.entity.Libro;
+import com.LiteraturaAPI.model.entity.Author;
+import com.LiteraturaAPI.model.entity.Book;
 import com.LiteraturaAPI.repository.AuthorRepository;
 import com.LiteraturaAPI.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -45,8 +46,7 @@ public class BibliotecaService {
 
         // Validamos que tenga autor
         if (bookData.autores() == null || bookData.autores().isEmpty()) {
-            System.out.println("El libro no tiene autores registrados.");
-            return;
+            throw new AutorNoEncontradoException("El libro ´" + bookData.titulo() + "' no tiene autores registrados.");
         }
 
         // Obtenemos el primer resultado de idioma.
@@ -54,7 +54,7 @@ public class BibliotecaService {
                 ? bookData.idiomas().get(0) : "Desconocido";
 
         // Validamos si existe libro en la DB
-        Optional<Libro> libroExistente = bookRepository.findByIdLibro(bookData.idLibro());
+        Optional<Book> libroExistente = bookRepository.findByIdLibro(bookData.idLibro());
         if (libroExistente.isPresent()){
             throw  new LibroYaExisteException("El libro '" + bookData.titulo() + "' ya se encuentra registrado en la DB");
         }
@@ -64,9 +64,9 @@ public class BibliotecaService {
         AuthorData authorData = bookData.autores().get(0);
 
         // Validamos si existe autor en la DB
-        Autor autor = authorRepository.findByNombreIgnoreCase(authorData.autor())
+        Author autor = authorRepository.findByNombreIgnoreCase(authorData.autor())
                 .orElseGet(() -> {
-                    Autor nuevoAutor = new Autor();
+                    Author nuevoAutor = new Author();
                     nuevoAutor.setNombre(authorData.autor());
                     nuevoAutor.setFechaNacimiento(authorData.fechaNacimiento());
                     nuevoAutor.setFechaFallecimiento(authorData.fechaFallecimiento());
@@ -74,14 +74,14 @@ public class BibliotecaService {
                 });
 
         // Crear el libro
-        Libro nuevolibro = new Libro();
-        nuevolibro.setIdLibro(bookData.idLibro());
-        nuevolibro.setTitulo(bookData.titulo());
-        nuevolibro.setIdioma(idioma);
-        nuevolibro.setNumeroDescargas(bookData.numeroDescargas());
-        nuevolibro.setAutor(autor);
+        Book nuevoLibro = new Book();
+        nuevoLibro.setIdLibro(bookData.idLibro());
+        nuevoLibro.setTitulo(bookData.titulo());
+        nuevoLibro.setIdioma(idioma);
+        nuevoLibro.setNumeroDescargas(bookData.numeroDescargas());
+        nuevoLibro.setAutor(autor);
 
-        bookRepository.save(nuevolibro);
+        bookRepository.save(nuevoLibro);
 
     }
 

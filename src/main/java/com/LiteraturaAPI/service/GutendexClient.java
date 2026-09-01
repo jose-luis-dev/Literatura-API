@@ -27,7 +27,7 @@ public class GutendexClient {
                 .header("accept", "application/json")
                 .build();
 
-        HttpResponse<String> response = null;
+        HttpResponse<String> response;
         try {
             response = client
                     .send(request, HttpResponse.BodyHandlers.ofString());

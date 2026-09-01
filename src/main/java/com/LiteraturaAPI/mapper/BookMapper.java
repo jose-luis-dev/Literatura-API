@@ -1,7 +1,7 @@
 package com.LiteraturaAPI.mapper;
 
 import com.LiteraturaAPI.dto.BookDTO;
-import com.LiteraturaAPI.model.entity.Libro;
+import com.LiteraturaAPI.model.entity.Book;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +13,7 @@ public class BookMapper {
         this.authorMapper = authorMapper;
     }
 
-    public BookDTO toDTO(Libro libro){
+    public BookDTO toDTO(Book libro){
         return new BookDTO(
                 libro.getIdLibro(),
                 libro.getTitulo(),

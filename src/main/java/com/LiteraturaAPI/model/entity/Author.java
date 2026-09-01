@@ -14,7 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "autores")
-public class Autor {
+public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,6 @@ public class Autor {
     private Integer fechaFallecimiento;
 
     @OneToMany(mappedBy = "autor")
-    private List<Libro> libros;
+    private List<Book> libros;
 
 }
