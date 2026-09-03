@@ -4,28 +4,29 @@ import com.LiteraturaAPI.dto.BookDTO;
 import com.LiteraturaAPI.mapper.BookMapper;
 import com.LiteraturaAPI.model.BookResponse;
 import com.LiteraturaAPI.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BookService {
 
-    @Autowired
-    private GutendexClient gutendexClient;
-
-    @Autowired
-    private ConvertData convertData;
-
+    private final GutendexClient gutendexClient;
+    private final ConvertData convertData;
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
 
     public BookService(
+            GutendexClient gutendexClient,
+            ConvertData convertData,
             BookRepository bookRepository,
             BookMapper bookMapper
     ){
+        this.gutendexClient = gutendexClient;
+        this.convertData = convertData;
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
     }
@@ -33,7 +34,8 @@ public class BookService {
 
     // libro por título desde API Externa
     public BookResponse buscarEnGutendexPorTitulo (String titulo){
-        String url = "/books/?search=" + titulo.replace(" ","+");
+        String tituloEncoded = URLEncoder.encode(titulo, StandardCharsets.UTF_8);
+        String url = "/books/?search=" + tituloEncoded;
         String json = gutendexClient.fetch(url);
 
         return convertData.getData(json, BookResponse.class);

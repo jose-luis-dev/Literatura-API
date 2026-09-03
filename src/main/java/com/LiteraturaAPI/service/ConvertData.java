@@ -1,10 +1,13 @@
 package com.LiteraturaAPI.service;
 
 
+import com.LiteraturaAPI.exception.GutendexApiException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Slf4j
 @Component
 public class ConvertData implements IConvertData {
 
@@ -15,7 +18,8 @@ public class ConvertData implements IConvertData {
         try {
             return objectMapper.readValue(json, clase);
         }catch (JsonProcessingException e){
-            throw new RuntimeException("Error al convertir el JSON", e);
+            log.error("Error al deserializar JSON hacia la clase {}: {}", clase.getSimpleName(), e.getMessage(), e);
+            throw new GutendexApiException("Error al convertir el JSON", e);
         }
     }
 }

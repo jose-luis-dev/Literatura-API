@@ -13,8 +13,6 @@ import com.LiteraturaAPI.repository.BookRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 public class BibliotecaService {
 
@@ -44,7 +42,12 @@ public class BibliotecaService {
         // Obtenemos el primer resultado del libro buscado
         BookData bookData = response.resultados().get(0);
 
-        // Validamos que tenga autor
+        // 1. Validamos PRIMERO si el libro ya existe en la DB (Patrón FAIL-FAST)
+        if (bookRepository.findByIdLibro(bookData.idLibro()).isPresent()){
+            throw new LibroYaExisteException("El libro '" + bookData.titulo() + "' ya se encuentra registrado en la DB");
+        }
+
+        // 2. Validamos que tenga autor (Solo si confirmamos que el libro no estaba registrado)
         if (bookData.autores() == null || bookData.autores().isEmpty()) {
             throw new AutorNoEncontradoException("El libro ´" + bookData.titulo() + "' no tiene autores registrados.");
         }
@@ -53,13 +56,6 @@ public class BibliotecaService {
         String idioma = (bookData.idiomas() != null && !bookData.idiomas().isEmpty())
                 ? bookData.idiomas().get(0) : "Desconocido";
 
-        // Validamos si existe libro en la DB
-        Optional<Book> libroExistente = bookRepository.findByIdLibro(bookData.idLibro());
-        if (libroExistente.isPresent()){
-            throw  new LibroYaExisteException("El libro '" + bookData.titulo() + "' ya se encuentra registrado en la DB");
-        }
-
-        // ---Si no hay Libro y autores en la DB--- //
         // Obtener el primer autor e idioma
         AuthorData authorData = bookData.autores().get(0);
 

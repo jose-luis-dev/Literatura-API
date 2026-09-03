@@ -31,3 +31,13 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Variables de entorno / configuración local ###
+.env
+.env.*
+!.env.example
+
+### Application properties con posibles datos sencibles ###
+# Descomentar esta línea SOLO si la aplicación.yml real llegará a tener
+# credenciales hardcodeadas en vez de variables de entorno:
+# src/main/resources/application.yml
